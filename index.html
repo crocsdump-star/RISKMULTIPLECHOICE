@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Management Exam - Wiku</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--primary:#4f46e5;--primary2:#7c3aed;--green:#16a34a;--red:#dc2626;--border:#e2e8f0}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#eef2ff,#f8fafc 50%,#fdf2f8);color:var(--text);min-height:100vh}
+.container{max-width:980px;margin:auto;padding:24px}.hero{background:linear-gradient(135deg,#312e81,#7c3aed);color:white;border-radius:24px;padding:30px;box-shadow:0 16px 40px #312e8126;margin-bottom:20px}
+.hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,44px)}.hero p{margin:6px 0;opacity:.92}.wiku{margin-top:18px;padding:14px 16px;background:#ffffff18;border:1px solid #ffffff30;border-radius:14px;font-weight:600}
+.topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--card);padding:14px 18px;border-radius:16px;border:1px solid var(--border);margin-bottom:16px;position:sticky;top:10px;z-index:5;box-shadow:0 8px 25px #0f172a10}
+.progress{height:9px;background:#e5e7eb;border-radius:99px;overflow:hidden;flex:1}.progress>div{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0%;transition:.3s}.counter{font-weight:800;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:0 8px 25px #0f172a08}
+.qnum{color:var(--primary);font-weight:800;font-size:14px}.question{font-size:21px;font-weight:750;line-height:1.4;margin:8px 0 20px}
+.option{display:block;width:100%;text-align:left;padding:15px 16px;margin:10px 0;border:2px solid var(--border);border-radius:13px;background:#fff;cursor:pointer;font-size:16px;transition:.18s}.option:hover:not(:disabled){border-color:#a5b4fc;background:#eef2ff;transform:translateY(-1px)}.option.correct{border-color:var(--green);background:#f0fdf4;color:#166534}.option.wrong{border-color:var(--red);background:#fef2f2;color:#991b1b}.option:disabled{cursor:default}
+.feedback{display:none;padding:15px 16px;border-radius:13px;margin-top:14px;line-height:1.5}.feedback.show{display:block}.feedback.correct{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}.feedback.wrong{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.correct-answer{font-weight:800}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 40px}.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer;font-size:15px}.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}.btn.secondary{background:#fff;border:1px solid var(--border);color:var(--text)}.btn:hover{transform:translateY(-1px)}
+#result{display:none;text-align:center;background:#fff;border:1px solid var(--border);border-radius:22px;padding:28px;margin:20px 0;box-shadow:0 12px 35px #0f172a10}.score{font-size:54px;font-weight:900;color:var(--primary)}.message{font-size:18px;font-weight:700;margin:10px 0}.small{color:var(--muted);font-size:14px}
+@media(max-width:600px){.container{padding:12px}.hero,.card{padding:18px}.topbar{top:5px}.question{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="container">
+<section class="hero">
+<h1>🛡️ Risk Management Exam</h1>
+<p>50-item multiple-choice exam based on the provided Risk Management lessons.</p>
+<div class="wiku">💜 Good luck, Baby Wiku! Take your time, read carefully, and believe in yourself. 🌷</div>
+</section>
+
+<div class="topbar">
+<div class="counter" id="counter">0 / 50 answered</div>
+<div class="progress"><div id="progress"></div></div>
+</div>
+
+<div id="quiz"></div>
+
+<div id="result">
+<div>🎉 EXAM COMPLETE!</div>
+<div class="score" id="score">0/50</div>
+<div class="message" id="finalMessage"></div>
+<div class="small">You can retake the same exam, shuffle the questions, or generate a new exam set.</div>
+</div>
+
+<div class="actions">
+<button class="btn primary" onclick="retake()">🔄 Retake Exam</button>
+<button class="btn secondary" onclick="shuffleExam()">🔀 Shuffle Exam</button>
+<button class="btn secondary" onclick="generateNew()">✨ Generate New Exam</button>
+</div>
+</div>
+
+<script>
+const bank = [{"q": "What is risk management in Tourism and Hospitality Management?", "o": ["A method of identifying, assessing, controlling, and monitoring risks", "A method used only for financial budgeting", "A process focused only on employee scheduling", "A system used only for marketing"], "a": 0, "e": "The lesson defines risk management as the methodical process of identifying, assessing, controlling, and monitoring risks."}, {"q": "Which group can be affected by risks that risk management aims to control?", "o": ["Only guests", "Only employees", "Guests, employees, facilities, business operations, and the environment", "Only business owners"], "a": 2, "e": "Risk management considers guests, employees, facilities, operations, and the environment."}, {"q": "What does safety mainly focus on?", "o": ["Preventing accidents, injuries, and emergencies", "Protecting information from fraud only", "Maintaining food prices", "Increasing customer sales"], "a": 0, "e": "Safety focuses on preventing accidents, injuries, and emergencies."}, {"q": "What does security protect?", "o": ["Only food supplies", "Guests, employees, property, information, and business assets", "Only emergency equipment", "Only guest rooms"], "a": 1, "e": "Security protects people, property, information, and business assets from threats."}, {"q": "What is the main focus of sanitation?", "o": ["Increasing room capacity", "Maintaining cleanliness and preventing disease and contamination", "Monitoring employee attendance", "Preventing unauthorized access"], "a": 1, "e": "Sanitation focuses on cleanliness and preventing the spread of diseases and contamination."}, {"q": "What is hazard identification?", "o": ["Recognizing potential sources of accidents or injuries", "Calculating business profit", "Writing an incident report only", "Assigning employees to shifts"], "a": 0, "e": "Hazard identification means recognizing potential sources of accidents or injuries."}, {"q": "What does risk assessment determine?", "o": ["The likelihood and possible consequences of identified hazards", "The number of hotel rooms", "The salary of employees", "The brand of safety equipment"], "a": 0, "e": "Risk assessment determines the likelihood and possible consequences of identified hazards."}, {"q": "What is risk prevention and control?", "o": ["Implementing measures to eliminate or reduce risks", "Ignoring minor hazards", "Reporting only completed accidents", "Removing all employees from a workplace"], "a": 0, "e": "Risk prevention and control involves measures that eliminate or reduce risks."}, {"q": "Why are safety policies and standards established?", "o": ["To establish rules and procedures for safe operations", "To increase food prices", "To replace emergency drills", "To eliminate inspections"], "a": 0, "e": "Safety policies and standards establish rules and procedures for safe operations."}, {"q": "Which is included in safety training?", "o": ["First aid, fire safety, equipment use, and emergency response", "Only customer service", "Only accounting", "Only food marketing"], "a": 0, "e": "The lesson specifically includes first aid, fire safety, proper equipment use, and emergency response."}, {"q": "What does safety inspection and monitoring involve?", "o": ["Regularly checking facilities, equipment, food areas, guest rooms, and operation areas", "Checking only employee uniforms", "Checking only financial records", "Checking only hotel advertisements"], "a": 0, "e": "Safety inspections regularly check facilities, equipment, food areas, guest rooms, and other operation areas."}, {"q": "What is the purpose of incident reporting?", "o": ["Recording accidents, injuries, hazards, and near misses for corrective action", "Replacing safety training", "Increasing room rates", "Avoiding documentation"], "a": 0, "e": "Incident reporting records incidents and hazards so corrective action can be taken."}, {"q": "What does continuous improvement involve?", "o": ["Reviewing safety practices and improving them using incidents, inspections, and feedback", "Stopping all inspections", "Ignoring feedback", "Using the same procedures permanently"], "a": 0, "e": "Continuous improvement reviews practices and improves them based on incidents, inspections, and feedback."}, {"q": "What is emergency preparedness?", "o": ["Developing plans before an emergency occurs", "Waiting until an emergency starts", "Removing emergency equipment", "Avoiding emergency drills"], "a": 0, "e": "Emergency preparedness means developing plans before an emergency occurs."}, {"q": "What is an emergency response plan?", "o": ["Specific actions to be taken during different emergencies", "A list of hotel prices", "A food menu", "A staff vacation schedule"], "a": 0, "e": "An emergency response plan establishes specific actions for different emergencies."}, {"q": "Why is emergency communication important?", "o": ["It provides clear instructions and information to affected people and responders", "It replaces evacuation procedures", "It prevents all emergencies", "It is used only for advertising"], "a": 0, "e": "Emergency communication provides clear instructions and information to guests, employees, authorities, and responders."}, {"q": "Which is part of emergency procedures?", "o": ["Escape routes, emergency exits, assembly areas, and evacuation procedures", "Sales targets and discounts", "Employee salaries", "Menu planning"], "a": 0, "e": "Emergency procedures include escape routes, exits, assembly areas, and evacuation procedures."}, {"q": "Which is an example of emergency equipment?", "o": ["Fire extinguishers, alarms, first aid kits, and emergency lighting", "Office decorations", "Marketing posters", "Guest souvenirs"], "a": 0, "e": "The lesson lists fire extinguishers, alarms, first aid kits, emergency lighting, and communication devices."}, {"q": "Why is assignment of responsibilities important during emergencies?", "o": ["It designates people or emergency teams for specific tasks", "It eliminates the need for plans", "It prevents communication", "It removes all staff from responsibility"], "a": 0, "e": "Specific employees or emergency teams are assigned specific emergency tasks."}, {"q": "What is the purpose of first aid and medical assistance?", "o": ["To provide immediate care and arrange professional medical assistance when necessary", "To replace emergency responders", "To prevent all injuries", "To conduct financial audits"], "a": 0, "e": "First aid provides immediate care, with professional medical assistance arranged when necessary."}, {"q": "Which activity is an emergency drill?", "o": ["A fire, earthquake, or evacuation exercise", "A sales meeting", "A menu tasting", "A marketing presentation"], "a": 0, "e": "The lesson lists fire, earthquake, evacuation, and other emergency exercises as drills."}, {"q": "Who may be included in coordination with authorities during emergencies?", "o": ["Police, fire departments, hospitals, disaster-response agencies, and local government", "Only hotel guests", "Only restaurant suppliers", "Only marketing staff"], "a": 0, "e": "Emergency coordination may involve police, fire departments, hospitals, disaster agencies, and local government."}, {"q": "What happens during a post-emergency evaluation?", "o": ["What happened is assessed, documented, and used to improve the emergency plan", "The incident is forgotten", "All emergency equipment is removed", "Only financial losses are counted"], "a": 0, "e": "Post-emergency evaluation assesses and documents the response and improves the emergency plan."}, {"q": "What is a threat?", "o": ["A person, condition, activity, event, or situation with potential to cause harm or disruption", "Only a criminal", "Only a natural disaster", "Only a broken machine"], "a": 0, "e": "A threat can be a person, condition, activity, event, or situation that may cause injury, illness, damage, loss, or disruption."}, {"q": "What is vulnerability?", "o": ["A weakness or condition that makes a person, facility, system, or organization more likely to be affected by a threat", "A completed emergency drill", "A safety policy", "A type of first aid"], "a": 0, "e": "Vulnerability is a weakness or condition that increases susceptibility to a threat."}, {"q": "Which is an importance of risk management?", "o": ["Protection of guests and employees", "Increasing hazards", "Reducing sanitation", "Avoiding compliance"], "a": 0, "e": "Protecting guests and employees is one of the stated benefits of risk management."}, {"q": "How can risk management help a business financially?", "o": ["By reducing financial losses and operational disruptions", "By increasing accidents", "By eliminating inspections", "By ignoring hazards"], "a": 0, "e": "The lesson identifies reduction of financial losses and operational disruptions as a benefit."}, {"q": "How can risk management support customer relationships?", "o": ["By building customer trust and satisfaction", "By avoiding safety procedures", "By reducing cleanliness", "By ignoring emergencies"], "a": 0, "e": "Effective risk management helps build customer trust and satisfaction."}, {"q": "What does risk management help protect besides people and property?", "o": ["The reputation of the establishment", "Only the menu", "Only employee uniforms", "Only advertising materials"], "a": 0, "e": "Protecting the establishment's reputation is listed as a benefit."}, {"q": "What does business operational continuity mean in the lesson?", "o": ["Ensuring operations can continue during emergencies", "Stopping operations permanently", "Avoiding emergency plans", "Removing all safety equipment"], "a": 0, "e": "Risk management helps ensure business operational continuity during emergencies."}, {"q": "What is the primary prevention approach?", "o": ["Anticipating possible hazards and acting before they cause harm", "Waiting for an accident first", "Ignoring minor hazards", "Only documenting accidents afterward"], "a": 0, "e": "Primary prevention means anticipating hazards and taking appropriate action before harm occurs."}, {"q": "Which is a common risk assessment technique?", "o": ["Risk matrix assessment such as severity", "Employee birthday tracking", "Menu design", "Advertising analysis"], "a": 0, "e": "The lesson lists risk matrix assessment, including severity, as a common technique."}, {"q": "What is a walkthrough examination used for?", "o": ["Examining places and situations to identify hazards", "Calculating payroll", "Creating advertisements", "Ordering food"], "a": 0, "e": "Inspection and walkthrough examination is listed as a risk assessment technique."}, {"q": "What is Job Safety Analysis?", "o": ["A technique listed for assessing risk and safety in work activities", "A customer satisfaction survey", "A food pricing method", "A marketing strategy"], "a": 0, "e": "Job Safety Analysis is specifically listed among the common risk assessment techniques."}, {"q": "Which tool can help standardize risk checking?", "o": ["Standard checklists", "Advertising flyers", "Sales receipts", "Guest menus"], "a": 0, "e": "Standard checklists are one of the common risk assessment techniques."}, {"q": "Why analyze incidents and accidents?", "o": ["To assess risk scenarios and help improve controls", "To increase hazards", "To avoid corrective action", "To remove safety standards"], "a": 0, "e": "Analysis of incidents and accidents is a risk assessment technique that supports identifying and controlling risks."}, {"q": "What question is associated with the 'what if' analysis?", "o": ["What if a particular hazard or event occurs?", "What if sales increase?", "What if the menu changes?", "What if the hotel gets new furniture?"], "a": 0, "e": "The 'what if' analysis is listed as a common risk assessment technique for considering possible scenarios."}, {"q": "After identifying potential hazards, what does risk analysis help determine?", "o": ["The gravity or seriousness of the risk", "The hotel room price", "The employee's vacation date", "The restaurant menu"], "a": 0, "e": "The lesson says risk analysis helps conclude the gravity of the risk."}, {"q": "What occurs when evaluating risks?", "o": ["Priorities are taken regarding what is acceptable and non-acceptable according to standards", "All risks are automatically ignored", "All risks are automatically eliminated", "Only financial risks are considered"], "a": 0, "e": "Risk evaluation involves prioritizing what is acceptable and non-acceptable according to standards."}, {"q": "What is selected after risk evaluation?", "o": ["Control measures and procedures", "Marketing slogans", "Guest discounts", "Employee uniforms"], "a": 0, "e": "The process includes selecting control measures to use as procedures."}, {"q": "What should happen after control practices are implemented?", "o": ["Their effectiveness should be monitored and reviewed", "They should never be checked again", "All records should be deleted", "Training should stop"], "a": 0, "e": "The process ends with monitoring and reviewing effectiveness and making adjustments when needed."}, {"q": "Which is NOT listed as a risk treatment option?", "o": ["Risk avoidance", "Risk reduction", "Risk sharing", "Risk decoration"], "a": 3, "e": "The listed treatment options are avoidance, reduction, sharing, retention, and escalation."}, {"q": "What does risk avoidance mean in the context of treatment options?", "o": ["Choosing an action that avoids the risk", "Increasing exposure to the risk", "Ignoring the risk", "Documenting the risk only"], "a": 0, "e": "Risk avoidance is one of the treatment options identified in the lesson."}, {"q": "What should risk communication provide?", "o": ["Accurate, timely, understandable information about risks and preventive or emergency measures", "Only confidential financial information", "Only advertisements", "Only employee schedules"], "a": 0, "e": "Risk communication should be accurate, timely, and understandable, covering risks, preventive measures, and emergency procedures."}, {"q": "Which three questions support critical thinking in risk communication?", "o": ["Who needs to know? What do they need to know? How should we tell them?", "Who is richest? What is cheapest? When is lunch?", "Who works longest? What is easiest? How do we sell?", "What is the menu? Who cooks? What is the price?"], "a": 0, "e": "The lesson identifies these three questions for critical analysis of risk communication."}, {"q": "What is safety management?", "o": ["A systematic process of identifying hazards, assessing risks, preventing accidents, and protecting people, property, and the environment", "A process for increasing hotel sales", "A process only for food preparation", "A system only for security guards"], "a": 0, "e": "Safety management systematically identifies hazards, assesses risks, prevents accidents, and protects people, property, and the environment."}, {"q": "Which is a component of safety management?", "o": ["Hazard identification", "Room decoration", "Menu promotion", "Sales forecasting"], "a": 0, "e": "Hazard identification is one of the listed safety management components."}, {"q": "What are emergency procedures?", "o": ["Planned and organized actions followed when an unexpected event threatens safety, security, health, or property", "Optional activities done only after an emergency", "Marketing plans for emergencies", "Rules for increasing room prices"], "a": 0, "e": "Emergency procedures are planned and organized actions for unexpected threatening events."}, {"q": "What does OHS stand for?", "o": ["Occupational Health & Safety", "Operational Hotel Services", "Organizational Hospitality Standards", "Office Health System"], "a": 0, "e": "OHS stands for Occupational Health & Safety."}, {"q": "Which standard is mentioned in the lesson in relation to OHS?", "o": ["ISO 45001:2018", "ISO 9000:2001", "ISO 14001:1999", "ISO 27001:2005"], "a": 0, "e": "The lesson specifically mentions Occupational Health & Safety and ISO 45001:2018 standards."}];
+let exam = [];
+let answered = 0;
+let score = 0;
+
+const congrats = [
+"🎉 Correct, Baby Wiku! You got it! Keep going, you're doing amazing! 💜",
+"🌟 Yesss, Wiku! That's correct! Your hard work is showing! 🥰",
+"💖 Great job, Baby Wiku! Another one correct! Keep believing in yourself!",
+"👏 Correct! I'm so proud of you, Wiku! One step closer to a perfect score!",
+"✨ Amazing, Wiku! You know this! Keep that confidence going! 💜"
+];
+const encourage = [
+"💜 It's okay, Baby Wiku! Mistakes are part of learning. You can get the next one!",
+"🌷 Don't give up, Wiku! Read the explanation, learn from it, and keep going!",
+"🥰 You're still doing great, Baby Wiku. One wrong answer doesn't define your score!",
+"💪 Keep going, Wiku! You are learning with every question. I believe in you!",
+"🌟 It's okay! Take a breath and try your best on the next one. You've got this!"
+];
+
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+
+function buildExam(shuffleQuestions=false){
+  exam = bank.map(q=>({...q,o:[...q.o]}));
+  if(shuffleQuestions) shuffle(exam);
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function render(){
+  answered=0; score=0;
+  document.getElementById("result").style.display="none";
+  document.getElementById("quiz").innerHTML=exam.map((q,i)=>`
+    <div class="card" id="q${i}">
+      <div class="qnum">QUESTION ${i+1} OF ${exam.length}</div>
+      <div class="question">${escapeHtml(q.q)}</div>
+      <div>${q.o.map((opt,j)=>`<button class="option" onclick="answer(${i},${j},this)">${escapeHtml(opt)}</button>`).join("")}</div>
+      <div class="feedback" id="f${i}"></div>
+    </div>`).join("");
+  updateProgress();
+}
+function answer(i,j,btn){
+  const card=document.getElementById("q"+i);
+  if(card.dataset.answered==="1") return;
+  card.dataset.answered="1";
+  answered++;
+  const q=exam[i];
+  const buttons=card.querySelectorAll(".option");
+  buttons.forEach((b,k)=>{b.disabled=true;if(k===q.a)b.classList.add("correct");});
+  const fb=document.getElementById("f"+i);
+  if(j===q.a){
+    score++;
+    btn.classList.add("correct");
+    fb.className="feedback correct show";
+    fb.innerHTML="<strong>"+congrats[Math.floor(Math.random()*congrats.length)]+"</strong><br>Correct answer: "+escapeHtml(q.o[q.a]);
+  }else{
+    btn.classList.add("wrong");
+    fb.className="feedback wrong show";
+    fb.innerHTML="<strong>"+encourage[Math.floor(Math.random()*encourage.length)]+"</strong><br><span class='correct-answer'>Correct answer: "+escapeHtml(q.o[q.a])+"</span><br>"+escapeHtml(q.e);
+  }
+  updateProgress();
+  if(answered===exam.length) finish();
+}
+function updateProgress(){
+  document.getElementById("counter").textContent=answered+" / "+exam.length+" answered";
+  document.getElementById("progress").style.width=(answered/exam.length*100)+"%";
+}
+function finish(){
+  document.getElementById("result").style.display="block";
+  document.getElementById("score").textContent=score+"/"+exam.length;
+  let msg=score===50
+    ?"🏆 PERFECT SCORE, BABY WIKU! 50/50! You absolutely crushed it! 💜🎉"
+    :score>=45
+    ?"🌟 AMAZING JOB, BABY WIKU! You did really well! Keep shining! 💜"
+    :score>=35
+    ?"💖 GREAT WORK, WIKU! You're learning a lot. Keep practicing and you'll get even stronger!"
+    :score>=25
+    ?"🌷 GOOD EFFORT, BABY WIKU! Review the questions you missed and try again. You can do it!"
+    :"💪 KEEP GOING, WIKU! Every mistake is a chance to learn. Don't give up—you've got this! 💜";
+  document.getElementById("finalMessage").textContent=msg;
+  document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function retake(){buildExam(false);}
+function shuffleExam(){buildExam(true);}
+function generateNew(){
+  // Creates a fresh randomized 50-question set from the supplied 50-item bank.
+  // The set is different in order and answer-option order while preserving source content.
+  exam=bank.map(q=>({...q,o:shuffle([...q.o])}));
+  shuffle(exam);
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+buildExam(false);
+</script>
+</body>
+</html>
